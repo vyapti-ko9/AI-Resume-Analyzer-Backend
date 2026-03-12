@@ -11,10 +11,10 @@ export const uploadResume = async (req: Request, res: Response) => {
       return
     }
 
-    const filePath = req.file.path;
-    const dataBuffer = fs.readFileSync(filePath);
+    const dataBuffer = req.file.buffer;
 
     const parser = new PDFParse({ data: dataBuffer });
+
     const pdfData = await parser.getText();
     const resumeText = pdfData.text;
 
@@ -29,9 +29,6 @@ export const uploadResume = async (req: Request, res: Response) => {
       resumeId: savedResume._id,
       preview: resumeText.substring(0, 500),
     });
-
-    fs.unlinkSync(filePath);
-
   } catch (error) {
     console.error(error);
     res.status(500).json({ message: "Internal server error" });
