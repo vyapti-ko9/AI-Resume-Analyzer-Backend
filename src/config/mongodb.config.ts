@@ -2,11 +2,16 @@ import mongoose from "mongoose";
 
 export const connectDB = async () => {
   try {
-    const uri = "mongodb://localhost:27017/Vyapti"
-    await mongoose.connect(process.env.MONGO_URI as string || uri);
+    const uri =
+      process.env.MONGO_URI;
+
+    await mongoose.connect(uri as string);
+
     console.log("MongoDB connected");
+    console.log("Connection state:", mongoose.connection.readyState);
+
   } catch (error) {
-    console.log("Database connection error", error);
+    console.error("Database connection error:", error);
     process.exit(1);
   }
 };
